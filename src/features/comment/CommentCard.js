@@ -1,9 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
 import { fDate } from "../../utils/formatTime";
 import CommentReaction from "./CommentReaction";
+import { IconButton } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Menu } from "@mui/material";
+import { MenuItem } from "@mui/material";
+import CommentEditDialog from "./CommentEditDialog";
+import CommentDeleteDialog from "./CommentDeleteDialog";
 
 function CommentCard({ comment }) {
+  const [anchorEl, setAnchorEl] = useState();
+  const areOptionsOpened = Boolean(anchorEl);
+
+  const handleOptionsOpen = (event) => {
+    setAnchorEl(event.target);
+  };
+
+  const handleOptionsClose = () => {
+    setAnchorEl(null);
+  };
+
+  const deleteCommentOption = () => {
+    setAnchorEl(null);
+  };
+
+  const editCommentOption = () => {
+    setAnchorEl(null);
+  };
   return (
     <Stack direction="row" spacing={2}>
       <Avatar alt={comment.author?.name} src={comment.author?.avatarUrl} />
@@ -17,9 +41,41 @@ function CommentCard({ comment }) {
           <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
             {comment.author?.name}
           </Typography>
+          <Box flexGrow={1}></Box>
           <Typography variant="caption" sx={{ color: "text.disabled" }}>
             {fDate(comment.createdAt)}
           </Typography>
+          <IconButton onClick={handleOptionsOpen}>
+            <MoreVertIcon sx={{ fontSize: 18, marginBottom: "2px" }} />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            id={"primary-search-account-menu"}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={areOptionsOpened}
+            onClose={handleOptionsClose}
+          >
+            <MenuItem onClick={editCommentOption}>
+              <CommentEditDialog
+                commentId={comment._id}
+                postId={comment.post}
+              />
+            </MenuItem>
+            <MenuItem onClick={deleteCommentOption}>
+              <CommentDeleteDialog
+                commentId={comment._id}
+                postId={comment.post}
+              />
+            </MenuItem>
+          </Menu>
         </Stack>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {comment.content}

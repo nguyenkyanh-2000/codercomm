@@ -7,9 +7,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch } from "react-redux";
-import { deletePost } from "./postSlice";
+import { deleteComment } from "./commentSlice";
 
-export default function PostDeleteDialog({ postId }) {
+export default function CommentDeleteDialog({ postId, commentId }) {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
 
@@ -22,13 +22,13 @@ export default function PostDeleteDialog({ postId }) {
   };
 
   const handleAgree = () => {
-    dispatch(deletePost({ postId: postId }));
+    dispatch(deleteComment({ commentId: commentId, postId: postId }));
     setOpen(false);
   };
 
   return (
     <div>
-      <Typography onClick={handleClickOpen}>Delete Post</Typography>
+      <Typography onClick={handleClickOpen}>Delete</Typography>
       <Dialog
         open={open}
         onClose={handleDisagree}
@@ -38,7 +38,7 @@ export default function PostDeleteDialog({ postId }) {
         <DialogTitle id="alert-dialog-title">{"Delete the post?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            The deleted post cannot be recovered. Proceed?
+            The deleted comment cannot be recovered. Proceed?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

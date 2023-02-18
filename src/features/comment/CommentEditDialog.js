@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as Yup from "yup";
-import { useCallback } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -9,13 +8,12 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Typography } from "@mui/material";
 import FTextField from "../../components/form/FTextField.js";
-import FUploadImage from "../../components/form/FUploadImage.js";
 import FormProvider from "../../components/form/FormProvider.js";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { alpha } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { updatePost } from "./postSlice.js";
+import { updateComment } from "./commentSlice.js";
 
 const yupSchema = Yup.object().shape({
   content: Yup.string().required("Content is required"),
@@ -26,13 +24,13 @@ const defaultValues = {
   image: null,
 };
 
-export default function PostEditDialog({ postId }) {
+export default function CommentEditDialog({ postId, commentId }) {
   const [open, setOpen] = React.useState(false);
   const methods = useForm({
     resolver: yupResolver(yupSchema),
     defaultValues,
   });
-  const { handleSubmit, setValue, reset } = methods;
+  const { handleSubmit, reset } = methods;
   const dispatch = useDispatch();
 
   const handleClickOpen = () => {
@@ -45,31 +43,20 @@ export default function PostEditDialog({ postId }) {
   };
 
   const onSubmit = (data) => {
-    dispatch(
-      updatePost({ postId: postId, content: data.content, image: data.image })
-    ).then(() => reset());
     setOpen(false);
+    dispatch(
+      updateComment({
+        postId: postId,
+        commentId: commentId,
+        content: data.content,
+      })
+    );
+    reset();
   };
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      if (file) {
-        setValue(
-          "image",
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        );
-      }
-    },
-    [setValue]
-  );
 
   return (
     <div>
-      <Typography onClick={handleClickOpen}>Edit Post</Typography>
+      <Typography onClick={handleClickOpen}>Edit</Typography>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -77,9 +64,11 @@ export default function PostEditDialog({ postId }) {
         maxWidth={"50vw"}
       >
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle>Edit post</DialogTitle>
+          <DialogTitle>Edit comment</DialogTitle>
           <DialogContent>
-            <DialogContentText>Please update your post here.</DialogContentText>
+            <DialogContentText>
+              Please update your comment here.
+            </DialogContentText>
 
             <FTextField
               name="content"
@@ -94,14 +83,6 @@ export default function PostEditDialog({ postId }) {
                 },
                 marginTop: "16px",
               }}
-            />
-
-            <FUploadImage
-              name="image"
-              accept="image/*"
-              maxSize={3145728}
-              onDrop={handleDrop}
-              sx={{ marginTop: "16px" }}
             />
           </DialogContent>
           <DialogActions>

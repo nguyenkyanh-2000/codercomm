@@ -128,6 +128,9 @@ export const updatePost =
         content,
         image: imageUrl,
       });
+      // Get the user since update post return only author._id (not all info)
+      const user = await apiService.get(`/users/me`);
+      response.data.author = user.data;
       dispatch(slice.actions.updatePostSuccess(response.data));
       toast.success("Update successfully");
       dispatch(getCurrentUserProfile());

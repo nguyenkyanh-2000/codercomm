@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Link,
@@ -8,16 +8,38 @@ import {
   Typography,
   CardHeader,
   IconButton,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { fDate } from "../../utils/formatTime";
-
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import PostReaction from "./PostReaction";
 import CommentForm from "../comment/CommentForm";
 import CommentList from "../comment/CommentList";
+import PostEditDialog from "./PostEditDialog";
+import PostDeleteDialog from "./PostDeleteDialog";
 
 function PostCard({ post }) {
+  const [anchorEl, setAnchorEl] = useState();
+  const areOptionsOpened = Boolean(anchorEl);
+
+  const handleOptionsOpen = (event) => {
+    setAnchorEl(event.target);
+  };
+
+  const handleOptionsClose = () => {
+    setAnchorEl(null);
+  };
+
+  const deletePostOption = () => {
+    setAnchorEl(null);
+  };
+
+  const editPostOption = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Card>
       <CardHeader
@@ -45,11 +67,34 @@ function PostCard({ post }) {
           </Typography>
         }
         action={
-          <IconButton>
+          <IconButton onClick={handleOptionsOpen}>
             <MoreVertIcon sx={{ fontSize: 30 }} />
           </IconButton>
         }
       />
+
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        id={"primary-search-account-menu"}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={areOptionsOpened}
+        onClose={handleOptionsClose}
+      >
+        <MenuItem onClick={editPostOption}>
+          <PostEditDialog postId={post._id} />
+        </MenuItem>
+        <MenuItem onClick={deletePostOption}>
+          <PostDeleteDialog postId={post._id} />
+        </MenuItem>
+      </Menu>
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Typography>{post.content}</Typography>

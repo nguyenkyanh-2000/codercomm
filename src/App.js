@@ -10,9 +10,6 @@ import {
 } from "./app/config";
 
 function App() {
-  console.log(BASE_URL);
-  console.log(CLOUDINARY_CLOUD_NAME);
-  console.log(CLOUDINARY_UPLOAD_PRESET);
   return (
     <AuthProvider>
       <BrowserRouter>

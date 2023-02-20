@@ -19,10 +19,12 @@ import CommentForm from "../comment/CommentForm";
 import CommentList from "../comment/CommentList";
 import PostEditDialog from "./PostEditDialog";
 import PostDeleteDialog from "./PostDeleteDialog";
+import useAuth from "../../hooks/useAuth";
 
 function PostCard({ post }) {
   const [anchorEl, setAnchorEl] = useState();
   const areOptionsOpened = Boolean(anchorEl);
+  const { user } = useAuth();
 
   const handleOptionsOpen = (event) => {
     setAnchorEl(event.target);
@@ -67,34 +69,38 @@ function PostCard({ post }) {
           </Typography>
         }
         action={
-          <IconButton onClick={handleOptionsOpen}>
-            <MoreVertIcon sx={{ fontSize: 30 }} />
-          </IconButton>
+          user._id === post._id && (
+            <IconButton onClick={handleOptionsOpen}>
+              <MoreVertIcon sx={{ fontSize: 30 }} />
+            </IconButton>
+          )
         }
       />
 
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        id={"primary-search-account-menu"}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={areOptionsOpened}
-        onClose={handleOptionsClose}
-      >
-        <MenuItem onClick={editPostOption}>
-          <PostEditDialog postId={post._id} />
-        </MenuItem>
-        <MenuItem onClick={deletePostOption}>
-          <PostDeleteDialog postId={post._id} />
-        </MenuItem>
-      </Menu>
+      {user._id === post._id && (
+        <Menu
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          id={"primary-search-account-menu"}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={areOptionsOpened}
+          onClose={handleOptionsClose}
+        >
+          <MenuItem onClick={editPostOption}>
+            <PostEditDialog postId={post._id} />
+          </MenuItem>
+          <MenuItem onClick={deletePostOption}>
+            <PostDeleteDialog postId={post._id} />
+          </MenuItem>
+        </Menu>
+      )}
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Typography>{post.content}</Typography>

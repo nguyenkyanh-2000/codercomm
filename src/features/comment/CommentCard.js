@@ -8,10 +8,14 @@ import { Menu } from "@mui/material";
 import { MenuItem } from "@mui/material";
 import CommentEditDialog from "./CommentEditDialog";
 import CommentDeleteDialog from "./CommentDeleteDialog";
+import useAuth from "../../hooks/useAuth";
 
 function CommentCard({ comment }) {
   const [anchorEl, setAnchorEl] = useState();
   const areOptionsOpened = Boolean(anchorEl);
+  const { user } = useAuth();
+
+  console.log(comment._id);
 
   const handleOptionsOpen = (event) => {
     setAnchorEl(event.target);
@@ -45,37 +49,41 @@ function CommentCard({ comment }) {
           <Typography variant="caption" sx={{ color: "text.disabled" }}>
             {fDate(comment.createdAt)}
           </Typography>
-          <IconButton onClick={handleOptionsOpen}>
-            <MoreVertIcon sx={{ fontSize: 18, marginBottom: "2px" }} />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            id={"primary-search-account-menu"}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={areOptionsOpened}
-            onClose={handleOptionsClose}
-          >
-            <MenuItem onClick={editCommentOption}>
-              <CommentEditDialog
-                commentId={comment._id}
-                postId={comment.post}
-              />
-            </MenuItem>
-            <MenuItem onClick={deleteCommentOption}>
-              <CommentDeleteDialog
-                commentId={comment._id}
-                postId={comment.post}
-              />
-            </MenuItem>
-          </Menu>
+          {user._id === comment._id && (
+            <IconButton onClick={handleOptionsOpen}>
+              <MoreVertIcon sx={{ fontSize: 18, marginBottom: "2px" }} />
+            </IconButton>
+          )}
+          {user._id === comment._id && (
+            <Menu
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              id={"primary-search-account-menu"}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={areOptionsOpened}
+              onClose={handleOptionsClose}
+            >
+              <MenuItem onClick={editCommentOption}>
+                <CommentEditDialog
+                  commentId={comment._id}
+                  postId={comment.post}
+                />
+              </MenuItem>
+              <MenuItem onClick={deleteCommentOption}>
+                <CommentDeleteDialog
+                  commentId={comment._id}
+                  postId={comment.post}
+                />
+              </MenuItem>
+            </Menu>
+          )}
         </Stack>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {comment.content}

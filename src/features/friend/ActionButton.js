@@ -16,7 +16,7 @@ function ActionButton({ currentUserId, targetUserId, friendship, sx }) {
 
   const btnSendRequest = (
     <Button
-      sx={{ fontSize: "0.6rem", ...sx }}
+      sx={{ fontSize: { xs: "0.4rem", sm: "0.6rem" }, ...sx }}
       size="small"
       variant="contained"
       onClick={() => dispatch(sendFriendRequest(targetUserId))}
@@ -29,7 +29,7 @@ function ActionButton({ currentUserId, targetUserId, friendship, sx }) {
 
   const btnUnfriend = (
     <Button
-      sx={{ fontSize: "0.6rem", ...sx }}
+      sx={{ fontSize: { xs: "0.4rem", sm: "0.6rem" }, ...sx }}
       size="small"
       variant="contained"
       color="error"
@@ -50,7 +50,7 @@ function ActionButton({ currentUserId, targetUserId, friendship, sx }) {
   );
   const btnCancelRequest = (
     <Button
-      sx={{ fontSize: "0.6rem", ...sx }}
+      sx={{ fontSize: { xs: "0.4rem", sm: "0.6rem" }, ...sx }}
       size="small"
       variant="contained"
       color="error"
@@ -62,7 +62,7 @@ function ActionButton({ currentUserId, targetUserId, friendship, sx }) {
   const btnGroupReact = (
     <Stack direction="row" spacing={1}>
       <Button
-        sx={{ fontSize: "0.6rem", ...sx }}
+        sx={{ fontSize: { xs: "0.4rem", sm: "0.6rem" }, ...sx }}
         size="small"
         variant="contained"
         color="success"

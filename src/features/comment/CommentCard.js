@@ -15,8 +15,6 @@ function CommentCard({ comment }) {
   const areOptionsOpened = Boolean(anchorEl);
   const { user } = useAuth();
 
-  console.log(comment._id);
-
   const handleOptionsOpen = (event) => {
     setAnchorEl(event.target);
   };
@@ -49,12 +47,12 @@ function CommentCard({ comment }) {
           <Typography variant="caption" sx={{ color: "text.disabled" }}>
             {fDate(comment.createdAt)}
           </Typography>
-          {user._id === comment._id && (
+          {user._id === comment.author._id && (
             <IconButton onClick={handleOptionsOpen}>
               <MoreVertIcon sx={{ fontSize: 18, marginBottom: "2px" }} />
             </IconButton>
           )}
-          {user._id === comment._id && (
+          {user._id === comment.author._id && (
             <Menu
               anchorEl={anchorEl}
               anchorOrigin={{

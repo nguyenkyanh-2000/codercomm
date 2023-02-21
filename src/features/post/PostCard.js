@@ -69,7 +69,7 @@ function PostCard({ post }) {
           </Typography>
         }
         action={
-          user._id === post._id && (
+          user._id === post.author._id && (
             <IconButton onClick={handleOptionsOpen}>
               <MoreVertIcon sx={{ fontSize: 30 }} />
             </IconButton>
@@ -77,7 +77,7 @@ function PostCard({ post }) {
         }
       />
 
-      {user._id === post._id && (
+      {user._id === post.author._id && (
         <Menu
           anchorEl={anchorEl}
           anchorOrigin={{
